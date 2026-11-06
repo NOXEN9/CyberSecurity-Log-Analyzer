@@ -11,6 +11,9 @@ A lightweight Python-based security script that simulates a SIEM (Security Infor
 ## 🚀 How It Works
 The script iterates through a centralized collection of network logon events, extracts critical keys (`User`, `IP`, `Protocol`, `Status`), and maintains a real-time counter for anomalies. If a user accumulates multiple failed attempts, it flags them as a potential security risk.
 
+## 📂 Source Code
+You can check out the source code directly here: [log_analyzer.py](log_analyzer.py)
+
 ## 💻 Tech Stack
 - **Language:** Python 3.x
 - **Concepts Used:** Variables, Strings, Lists, Dictionaries, Conditional Logic (`if/else`), Loops.
