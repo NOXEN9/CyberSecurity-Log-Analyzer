@@ -1,7 +1,7 @@
 """
 ===================================================================
 PROJECT: Cyber Security Log Analyzer
-AUTHOR: [Your Name / GitHub Username]
+AUTHOR: ASAD DAFALLA / Noxen
 VERSION: 1.0.0 (Alpha / Prototype)
 NOTE: This is a prototype version focused on dynamic event parsing.
       It is NOT the final production release. Future updates will
