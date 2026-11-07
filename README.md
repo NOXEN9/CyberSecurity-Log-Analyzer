@@ -1,19 +1,17 @@
 # Cyber Security Log Analyzer 🛡️
 
-A lightweight Python-based security script that simulates a SIEM (Security Information and Event Management) system parser to analyze authentication logs and detect potential brute-force attacks.
+A professional, modular Python-based security tool that simulates a SIEM system parser to analyze network authentication logs and detect potential brute-force attacks.
 
-## ✨ Features
-- **Dynamic Event Parsing:** Processes a list of dictionary-based security events (20 simulated login events).
-- **Logon Counter:** Tracks and aggregates failed login attempts per user dynamically using Python dictionaries.
-- **Protocol Tracking:** Identifies authentication protocols such as SSH, RDP, and HTTPS.
-- **Clean Output:** Generates a structured security report highlighting the total number of failed logons for system administrators.
+## ✨ What's New in v2.0.0 (Modular Update)
+- **Production-Ready Architecture:** Completely refactored from a single-use script into reusable, independent functions.
+- **Parametric Execution:** Functions now accept parameters and arguments, allowing the script to parse any given input log file dynamically.
+- **Cross-Format Pipeline:** Seamlessly imports raw spreadsheet logs from `IoC.csv` and automatically exports calculated summaries into structured `failed_report_1.json`.
 
-## 🚀 How It Works
-The script iterates through a centralized collection of network logon events, extracts critical keys (`User`, `IP`, `Protocol`, `Status`), and maintains a real-time counter for anomalies. If a user accumulates multiple failed attempts, it flags them as a potential security risk.
-
-## 📂 Source Code
-You can check out the source code directly here: [log_analyzer.py](log_analyzer.py)
+## 📂 Project Structure & Functions
+- `load_logs(file_path)`: Dynamically handles the ingestion and parsing of CSV log files.
+- `analyze_brute_force(logon_events)`: The core security logic engine that calculates failed logins per user using dictionaries.
+- `export_report(report_data, output_path)`: Exports compiled intelligence directly to persistent JSON storage.
 
 ## 💻 Tech Stack
 - **Language:** Python 3.x
-- **Concepts Used:** Variables, Strings, Lists, Dictionaries, Conditional Logic (`if/else`), Loops.
+- **Advanced Concepts:** Custom Functions (`def`), Return values, Main Execution Block Control (`__main__`), CSV & JSON I/O Modules.
