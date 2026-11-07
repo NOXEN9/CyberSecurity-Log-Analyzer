@@ -2,57 +2,58 @@
 ===================================================================
 PROJECT: Cyber Security Log Analyzer
 AUTHOR: ASAD DAFALLA / Noxen
-VERSION: 1.0.0 (Alpha / Prototype)
-NOTE: This is a prototype version focused on dynamic event parsing.
-      It is NOT the final production release. Future updates will
-      include automated blocking mechanisms and persistent storage.
+VERSION: 2.0.0 (Modular / Functions Update)
+NOTE: This update structures the log analyzer into reusable
+      functions using parameters and arguments.
 ===================================================================
 """
 
-# Hardcoded list simulating central network authentication logs (SIEM logs)
-Login_Events = [
-    {"User": "admin", "IP": "192.168.10.2", "Protocol": "SSH", "Status": "Failed"},
-    {"User": "admin", "IP": "192.168.10.2", "Protocol": "SSH", "Status": "Failed"},
-    {"User": "jdoe", "IP": "192.168.1.50", "Protocol": "HTTPS", "Status": "Success"},
-    {"User": "admin", "IP": "192.168.10.2", "Protocol": "SSH", "Status": "Success"},
-    {"User": "smith_v", "IP": "192.168.164.23", "Protocol": "RDP", "Status": "Failed"},
-    {"User": "smith_v", "IP": "192.168.164.23", "Protocol": "RDP", "Status": "Failed"},
-    {"User": "guest_user", "IP": "192.168.12.3", "Protocol": "FTP", "Status": "Failed"},
-    {"User": "smith_v", "IP": "192.168.164.23", "Protocol": "RDP", "Status": "Success"},
-    {"User": "jdoe", "IP": "192.168.1.51", "Protocol": "HTTPS", "Status": "Failed"},
-    {"User": "admin", "IP": "10.0.0.5", "Protocol": "SSH", "Status": "Success"},
-    {"User": "alice", "IP": "172.16.32.10", "Protocol": "SMB", "Status": "Success"},
-    {"User": "guest_user", "IP": "192.168.12.3", "Protocol": "FTP", "Status": "Failed"},
-    {"User": "guest_user", "IP": "192.168.12.3", "Protocol": "FTP", "Status": "Failed"},
-    {"User": "bob", "IP": "10.0.0.12", "Protocol": "RDP", "Status": "Failed"},
-    {"User": "jdoe", "IP": "192.168.1.50", "Protocol": "HTTPS", "Status": "Success"},
-    {"User": "bob", "IP": "10.0.0.12", "Protocol": "RDP", "Status": "Success"},
-    {"User": "db_admin", "IP": "192.168.103.26", "Protocol": "MySQL", "Status": "Failed"},
-    {"User": "db_admin", "IP": "192.168.103.26", "Protocol": "MySQL", "Status": "Failed"},
-    {"User": "alice", "IP": "172.16.32.10", "Protocol": "SMB", "Status": "Success"},
-    {"User": "db_admin", "IP": "192.168.103.26", "Protocol": "MySQL", "Status": "Failed"}
-]
+import csv
+import json
 
-# Dictionary to map and track the number of failed login attempts per user
-failed_login_counts = {}
 
-# Iterate through each security event dictionary inside the logs list
-for event in Login_Events:
-    # Extract string values from the dictionary keys for readability
-    UserID = event["User"]
-    IP_ID = event["IP"]
-    Protocol_ID = event["Protocol"]
-    Status_ID = event["Status"]
+# Function to Load Logs (Takes the file path as an argument)
+def load_logs(file_path):
+    logon_events = []
+    with open(file_path, "r", newline="") as file_input:
+        reader = csv.DictReader(file_input)
+        for row in reader:
+            logon_events.append(row)
+    return logon_events  # Returns the list to whoever called the function
 
-    # Filter only failed logon attempts to detect brute-force indicators
-    if Status_ID == "Failed":
-        # Increment counter if user already exists in our tracking dictionary
-        if UserID in failed_login_counts:
-            failed_login_counts[UserID] += 1
-        # Initialize the user counter to 1 if it's their first failed attempt
-        else:
-            failed_login_counts[UserID] = 1
 
-# Generate and print a clean security report for system administrators
-for UserID, count in failed_login_counts.items():
-    print(f"The User: {UserID} has {count} failed logons")
+# Function to Analyze Security Logic (Takes the logs list as an argument)
+def analyze_brute_force(logon_events):
+    failed_login_counts = {}
+
+    for event in logon_events:
+        user_id = event["User"]
+        status_id = event["Status"]
+
+        if status_id == "Failed":
+            if user_id in failed_login_counts:
+                failed_login_counts[user_id] += 1
+            else:
+                failed_login_counts[user_id] = 1
+
+    return failed_login_counts  # Returns the finalized dictionary report
+
+
+# Function to Export Results (Takes the data and target file path as arguments)
+def export_report(report_data, output_path):
+    with open(output_path, "w") as file_out:
+        json.dump(report_data, file_out, indent=4)
+    print(f"Success! Security report exported to '{output_path}'.")
+
+
+# THE CENTRAL CONTROL (Main Execution Flow)
+# This is where we call our functions and pass arguments to them
+if __name__ == "__main__":
+    # Step A: Load the raw CSV logs
+    raw_logs = load_logs("IoC.csv")
+
+    # Step B: Pass those logs into our security analyzer engine
+    security_analysis = analyze_brute_force(raw_logs)
+
+    # Step C: Export the final calculated counts into a JSON file
+    export_report(security_analysis, "failed_report_1.json")
