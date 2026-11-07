@@ -17,8 +17,6 @@ A modular Python security tool that simulates a SIEM-style log parser. It reads 
 ```
 log_analyzer/
 ├── log_analyzer.py          # The analyzer (functions + command line)
-├── sample_logs.csv          # Demo log file (includes corrupt rows on purpose)
-├── pytest.ini               # pytest configuration
 ├── tests/
 │   └── test_log_analyzer.py # Test suite
 └── README.md
@@ -53,7 +51,7 @@ Timestamp,User,IP,Status
 
 ## 🚀 Usage
 ```bash
-python log_analyzer.py sample_logs.csv --out-dir reports
+python log_analyzer.py IoC.csv --out-dir reports
 ```
 
 | Option | Default | Description |
@@ -97,6 +95,8 @@ IP,Failed_Attempts,Peak_In_Window,Flagged,Users_Targeted
 ```
 
 ## 🧪 Running the Tests
+Run it from the project folder (the one containing `log_analyzer.py`):
+
 ```bash
 python -m pytest
 ```
